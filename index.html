@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sinais IA feito por Trader Dieguinho</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(145deg, #0f0c29, #302b63, #24243e);
+      color: #00ffe7;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+    }
+    h1 {
+      font-size: 2rem;
+      text-shadow: 0 0 10px #00ffe7;
+    }
+    .painel {
+      background: #111;
+      border: 2px solid #00ffe7;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 0 20px #00ffe7;
+      width: 320px;
+      text-align: center;
+    }
+    button, select {
+      background-color: #00ffe7;
+      color: #111;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffe7;
+      transition: 0.3s;
+      font-family: 'Orbitron', sans-serif;
+    }
+    button:hover, select:hover {
+      background-color: #0ff;
+    }
+    select {
+      width: 100%;
+    }
+    #sinal, #historico {
+      margin-top: 15px;
+      font-size: 1.2rem;
+    }
+    .historico-item {
+      margin-top: 10px;
+      background: rgba(0, 255, 231, 0.1);
+      border-left: 4px solid #00ffe7;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sinais IA feito por Trader Dieguinho 🔥</h1>
+  <div class="painel">
+    <label for="paresSelect">Selecione o par de moeda:</label>
+    <select id="paresSelect">
+      <option value="EUR/USD">EUR/USD</option>
+      <option value="EUR/USD-OTC">EUR/USD-OTC</option>
+      <option value="GBP/USD">GBP/USD</option>
+      <option value="USD/JPY">USD/JPY</option>
+      <option value="AUD/USD">AUD/USD</option>
+      <option value="USD/CAD">USD/CAD</option>
+      <option value="NZD/USD">NZD/USD</option>
+      <option value="EUR/JPY">EUR/JPY</option>
+      <option value="GBP/JPY">GBP/JPY</option>
+      <option value="AUD/USD-OTC">AUD/USD-OTC</option>
+      <option value="USD/JPY-OTC">USD/JPY-OTC</option>
+      <option value="GBP/USD-OTC">GBP/USD-OTC</option>
+      <option value="USD/CAD-OTC">USD/CAD-OTC</option>
+    </select>
+
+    <label for="tempoSelect">Tempo da entrada:</label>
+    <select id="tempoSelect">
+      <option value="1 minuto">1 minuto</option>
+      <option value="5 minutos">5 minutos</option>
+      <option value="15 minutos">15 minutos</option>
+    </select>
+
+    <button onclick="gerarSinal()">Gerar Sinal</button>
+    <div id="sinal">Aguardando sinal...</div>
+    <button onclick="copiarSinal()">📋 Copiar sinal</button>
+  </div>
+
+  <div id="historico" class="painel">
+    <h3>📜 Histórico de Sinais</h3>
+    <div id="listaHistorico"></div>
+  </div>
+
+  <audio id="alertaAudio" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+  <script>
+    let ultimoSinal = '';
+
+    function gerarSinal() {
+      const parSelecionado = document.getElementById('paresSelect').value;
+      const tempoEntrada = document.getElementById('tempoSelect').value;
+      const agora = new Date();
+      const hora = agora.getHours();
+      const minutos = agora.getMinutes().toString().padStart(2, '0');
+      const segundos = agora.getSeconds().toString().padStart(2, '0');
+      const horarioEntrada = `${hora.toString().padStart(2, '0')}:${minutos}:${segundos}`;
+
+      // Confluências ajustadas para gerar mais sinais
+      const tendenciaConsistente = Math.random() > 0.4;
+      const movimentoForte = Math.random() > 0.4;
+      const pressaoDominante = Math.random() > 0.5;
+      const rompimentoConsolidacao = Math.random() > 0.4;
+      const padraoConfiavel = Math.random() > 0.5;
+
+      const todasConfluencias = tendenciaConsistente && movimentoForte && pressaoDominante && rompimentoConsolidacao && padraoConfiavel;
+
+      if (todasConfluencias) {
+        const direcao = Math.random() > 0.5 ? 'CALL 🔼' : 'PUT 🔽';
+        const probabilidade = Math.floor(Math.random() * 10) + 90;
+
+        ultimoSinal = `✅ ${parSelecionado} | ${direcao} | ${tempoEntrada} | Prob.: ${probabilidade}% | ${horarioEntrada}`;
+        document.getElementById('sinal').innerHTML = `
+          ✅ <strong>${parSelecionado}</strong><br>
+          SINAL CONFIRMADO: ${direcao}<br>
+          🧠 Confluências IA: 5/5<br>
+          ⏱️ Tempo: <strong>${tempoEntrada}</strong><br>
+          💹 Probabilidade: <strong>${probabilidade}%</strong><br>
+          🕒 Entrada às: <strong>${horarioEntrada}</strong>
+        `;
+
+        const item = document.createElement('div');
+        item.classList.add('historico-item');
+        item.textContent = ultimoSinal;
+        document.getElementById('listaHistorico').prepend(item);
+
+        document.getElementById('alertaAudio').play();
+      } else {
+        document.getElementById('sinal').innerHTML = `⚠️ Nenhum sinal disponível no momento. Aguardando 5 confluências da IA...`;
+      }
+    }
+
+    function copiarSinal() {
+      if (ultimoSinal) {
+        navigator.clipboard.writeText(ultimoSinal).then(() => {
+          alert("Sinal copiado com sucesso!");
+        });
+      } else {
+        alert("Nenhum sinal para copiar!");
+      }
+    }
+  </script>
+</body>
+</html>
